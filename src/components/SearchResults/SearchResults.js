@@ -5,11 +5,15 @@ import TrackList from '../TrackList/TrackList';
 
 class SearchResults extends React.Component {
 
+
   render() {
     return (
       <div className="SearchResults">
-        <h2>Results</h2>
-        <TrackList tracks={this.props.searchResults} />
+        <h2>Search Results</h2>
+        <TrackList
+          tracks={this.props.searchResults}
+          onAdd={this.props.addTrack}
+          isRemoval={false} />
       </div>
     );
   }
