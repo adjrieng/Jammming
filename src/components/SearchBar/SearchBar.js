@@ -11,11 +11,12 @@ class SearchBar extends React.Component {
       term: '',
     };
 
-    this.search.bind(this);
-    this.handleTermChage.bind(this);
+    this.search = this.search.bind(this);
+    this.handleTermChange = this.handleTermChange.bind(this);
+    this.handleEnterKey = this.handleEnterKey.bind(this);
   }
 
-  handleTermChage(event) {
+  handleTermChange(event) {
     this.setState({ term: event.target.value })
   }
 
@@ -23,13 +24,21 @@ class SearchBar extends React.Component {
     this.props.onSearch(this.state.term);
   }
 
+  //Adds the enter key functionality in the SearcBar field
+  handleEnterKey(event) {
+    if(event.key === 'Enter') {
+      //console.log('you pressed the enter key!')
+      this.search();
+    }
+  }
+
   render() {
     return (
       <div className="SearchBar">
         <input placeholder="Enter A Song, Album, or Artist"
-               onChange={this.handleTermChage}
-               />
-        <button className="SearchButton">SEARCH</button>
+               onChange={this.handleTermChange}
+               onKeyPress={this.handleEnterKey}/>
+        <button className="SearchButton" onClick={this.search}>SEARCH</button>
       </div>
     );
   }
