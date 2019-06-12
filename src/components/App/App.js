@@ -14,9 +14,9 @@ class App extends React.Component {
       playlistName: 'My New Playlist',
       playlistTracks: [{
         id: (Math.floor((Math.random() * 100) + 1)),
-        name: 'Remove sample Track',
-        artist: 'Sample',
-        album: 'Please remove this track when saving your list'
+        name: 'Placeholder Track',
+        artist: 'Placeholder',
+        album: 'Remove before saving your list'
       },]
     };
 

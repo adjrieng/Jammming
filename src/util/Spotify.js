@@ -49,6 +49,8 @@ const Spotify = {
          })
        );
        return res;
+     } else {
+       return []
      }
     });
   },
