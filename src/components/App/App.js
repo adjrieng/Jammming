@@ -12,12 +12,7 @@ class App extends React.Component {
     this.state = {
       searchResults: [],
       playlistName: 'My New Playlist',
-      playlistTracks: [{
-        id: (Math.floor((Math.random() * 100) + 1)),
-        name: 'Placeholder Track',
-        artist: 'Placeholder',
-        album: 'Remove before saving your list'
-      },]
+      playlistTracks: []
     };
 
     this.addTrack = this.addTrack.bind(this);

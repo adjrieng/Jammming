@@ -50,7 +50,8 @@ const Spotify = {
        );
        return res;
      } else {
-       return []
+       let res = [];
+       return res;
      }
     });
   },
