@@ -1,25 +1,38 @@
 const clientId = '621aad112b144a06a14fd6df54b260b1';
-const redirectURI = `http://localhost:3007/`;
+const redirectURI = `http://statuesque-grass.surge.sh/`;
 
-let accessToken;
-let expiresIn;
+let accessToken = localStorage.getItem('accessToken');
+let expiresIn = localStorage.getItem('expiresIn');
+
+window.onload = function (){
+  console.log('for desktop -> this clears the local variables')
+  localStorage.accessToken = '';
+  localStorage.expiresIn = '';
+
+}
+
+document.addEventListener("deviceready", function() {
+  console.log('for mobile -> this clears the local variables')
+  localStorage.accessToken = '';
+  localStorage.expiresIn = '';
+}, false);
 
 const Spotify = {
   // method to get access token
-  getAccessToken: function() {
+  getAccessToken() {
     // check for access token
-    if (accessToken) {
+    if (localStorage.accessToken.length > 1 && localStorage.expiresIn > 1) {
       // return access token if present
       return accessToken;
     }
     // if there is no access token but is present in window.location.href
     if (window.location.href.match(/access_token=([^&]*)/) && window.location.href.match(/expires_in=([^&]*)/)) {
       // set access token value
-      accessToken = window.location.href.match(/access_token=([^&]*)/)[1];
+      localStorage.accessToken = window.location.href.match(/access_token=([^&]*)/)[1];
       // set variable for expire time
-      expiresIn = window.location.href.match(/expires_in=([^&]*)/)[1];
-      // clear the value for the for expiration time
-      window.setTimeout(() => accessToken = '', expiresIn * 1000);
+      localStorage.expiresIn = window.location.href.match(/expires_in=([^&]*)/)[1];
+      // clear the value for the expiration time
+      window.setTimeout(() => accessToken = '', expiresIn * 3600);
       window.history.pushState('Access Token', null, '/');
       return accessToken;
     } else {
@@ -28,47 +41,44 @@ const Spotify = {
     }
   },
 
-  search: function(term) {
-
-    const accessToken = this.getAccessToken();
-
-    return fetch(`https://api.spotify.com/v1/search?type=track&q=${term}`,{
-      methos: 'GET',
-      headers: {Authorization: `Bearer ${accessToken}`}
-     })
-    .then(response => { return response.json()})
-    .then(jsonResponse => {
-     if(jsonResponse.tracks.items) {
-       // parse tracks
-       let res = jsonResponse.tracks.items.map(track => ({
-           id: track.id,
-           name: track.name,
-           artist: track.artists[0].name,
-           album: track.album.name,
-           uri: track.uri
-         })
-       );
-       return res;
-     } else {
-       let res = [];
-       return res;
-     }
-    });
+  search(term) {
+    let accessToken;
+    //check length of accessToken.. return token greater than .length(1) else, getToken
+    if(localStorage.accessToken.length>1){
+      accessToken = localStorage.accessToken;
+    }else{
+      accessToken = this.getAccessToken();
+    }
+    return fetch(`https://api.spotify.com/v1/search?type=track&q=${term}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
+    })
+      .then(response => response.json())
+      .then(jsonResponse => {
+        if (!jsonResponse.tracks) {
+          return [];
+        }
+        return jsonResponse.tracks.items.map(track => ({
+          id: track.id,
+          name: track.name,
+          artist: track.artists[0].name,
+          album: track.album.name,
+          uri: track.uri
+        }));
+      });
   },
 
-  savePlaylist: function(playlistName, trackURIs) {
+  savePlaylist(playlistName, trackURIs) {
     if (!playlistName || !trackURIs) {
       return;
     }
 
     let token, headers, userId, playlistId;
-
     // get access token
     token = this.getAccessToken();
-
     // get userId
     headers = {Authorization: `Bearer ${token}`};
-
     // get user id
     return fetch(`https://api.spotify.com/v1/me`,{
        method: 'GET',

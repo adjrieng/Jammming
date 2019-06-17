@@ -23,14 +23,15 @@ class App extends React.Component {
   }
 
   addTrack(track) {
-    if (this.state.playlistTracks.find(savedTrack => savedTrack.id !== track.id)) {
-      // Create a new array based on current state:
-      let playlistTracksArr = this.state.playlistTracks;
-      // Push track to array
-      playlistTracksArr.push(track);
-      // Set state
-      this.setState({ playlistTracks: playlistTracksArr });
+    if (this.state.playlistTracks.find(savedTrack => savedTrack.id === track.id)) {
+      return;
     }
+    // Create a new array based on current state:
+    let playlistTracksArr = this.state.playlistTracks;
+    // Push track to array
+    playlistTracksArr.push(track);
+    // Set state
+    this.setState({ playlistTracks: playlistTracksArr });
   }
 
   removeTrack(track) {
