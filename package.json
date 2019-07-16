@@ -3,10 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "lodash": "^4.17.14",
+    "querystringify": ">=2.0.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
-    "react-scripts": "3.0.1",
-    "querystringify": ">=2.0.0"
+    "react-scripts": "3.0.1"
   },
   "scripts": {
     "start": "set PORT=3007 && react-scripts start",
